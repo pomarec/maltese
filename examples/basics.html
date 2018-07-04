@@ -1,0 +1,36 @@
+<meta charset="UTF-8">
+<script type="module">
+    import * as Maltese from '../src/maltese.js';
+    
+    let app = new Maltese.App();
+    
+    let vc = new Maltese.ViewController();
+    vc.view.backgroundColor = 0x234132;
+    app.viewController.addChild(vc);
+
+
+    let view = new Maltese.View();
+    view.backgroundColor = 0x200032;
+    view.width = 100;
+    view.height = 100;
+    app.viewController.view.addChild(view);
+
+    let label = new Maltese.Label();
+    label.text = "labelllll !";
+    label.y = 200;
+    app.viewController.view.addChild(label);
+
+    let button = new Maltese.Button();
+    button.text = "push me !";
+    button.x = 200;
+    button.onTouchDown(function() {
+        button.x += 1;
+        button.text =  button.x;
+    });
+    app.viewController.view.addChild(button);
+
+
+</script>
+
+<!-- body is needed for development / livereload -->
+<body></body>
