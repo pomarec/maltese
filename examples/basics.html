@@ -20,14 +20,19 @@
     label.y = 200;
     app.viewController.view.addChild(label);
 
+
+/*
     let button = new Maltese.Button();
     button.text = "push me !";
-    button.x = 200;
     button.onTouchDown(function() {
         button.x += 1;
         button.text =  button.x;
     });
     app.viewController.view.addChild(button);
+*/
+
+    let c = new Maltese.LayoutConstraint(label, "right", app.viewController.view, "right", 1, -200);
+    label.addConstraint(c);
 
 
 </script>

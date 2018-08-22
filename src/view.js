@@ -1,9 +1,10 @@
 import './lib/pixi.js';
-import { Color } from './color.js';
+import { LayoutConstraint } from './layoutConstraint.js';
 
 export class View {
     constructor() {
         this.children = [];
+        this.constraints = [];
         this.graphics = new PIXI.Graphics();
 
         // Default values
@@ -80,6 +81,11 @@ export class View {
         this.graphics.interactive = true;
         this.graphics.on('tap', func);
         this.graphics.on('mousedown', func);
+    }
+
+    addConstraint(constraint) {
+        this.constraints.push(constraint);
+        LayoutConstraint.satisfy(this.constraints);
     }
 
     // Private methods
