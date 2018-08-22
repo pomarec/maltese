@@ -5,8 +5,6 @@ import { Label } from './label.js';
 export class Button extends View {
     constructor() {
         super();
-        this.width = 100;
-        this.height = 20;
         this.label = new Label();
         this.addChild(this.label);
         this._draw();
