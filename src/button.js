@@ -5,9 +5,13 @@ import { Label } from './label.js';
 export class Button extends View {
     constructor() {
         super();
-        this.label = new Label();
-        this.addChild(this.label);
-        this._draw();
+        this.label = new Label()
+        this.addChild(this.label)
+        this.label.anchors.left = 5
+        this.label.anchors.right = 5
+        this.label.anchors.top = 5
+        this.label.anchors.bottom = 5
+        this._draw()
     }
 
     get text() {
@@ -15,8 +19,8 @@ export class Button extends View {
     }
     set text(newValue) {
         this.label.text = newValue;
-        this.width = this.label.width + 10;
-        this.height = this.label.height + 10;
+        this.contentMinimumSize.width = this.label.anchors.left + this.label.width + this.label.anchors.right;
+        this.contentMinimumSize.height = this.label.anchors.top + this.label.height + this.label.anchors.bottom;
     }
 
     _draw() {

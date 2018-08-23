@@ -7,10 +7,10 @@ export class ViewController {
         this.children = [];
     }
     addChild(viewController) {
-        viewController.view.x = 0;
-        viewController.view.y = 0;
-        viewController.view.width = this.view.width;
-        viewController.view.height = this.view.height;
+        viewController.view.anchors.left = 0;
+        viewController.view.anchors.top = 0;
+        viewController.view.anchors.right = 0;
+        viewController.view.anchors.bottom = 0;
         this.view.addChild(viewController.view);
         this.children.push(viewController);
     }

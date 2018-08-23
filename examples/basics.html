@@ -13,16 +13,16 @@
     view.backgroundColor = 0x200032;
     view.width = 100;
     view.height = 100;
-    //app.viewController.view.addChild(view);
+    app.viewController.view.addChild(view);
 
     let label = new Maltese.Label();
     label.text = "labelllll !";
-    label.y = 200;
-    //app.viewController.view.addChild(label);
+    label.anchors.top = 200;
+    app.viewController.view.addChild(label);
 
     let button = new Maltese.Button();
     button.text = "push me !";
-    button.x = 200;
+    button.anchors.left = 200;
     button.onTouchDown(function() {
         button.x += 1;
         button.text =  button.x;

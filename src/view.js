@@ -13,11 +13,15 @@ export class View {
         // Default values
         this.width = 0
         this.height = 0
-        this.anchors = {
+        this.anchors = {        // null | nb pixels | "xx%"
             'top': null,
             'right': null,
             'bottom': null,
             'left': null
+        }
+        this.contentMinimumSize = {
+            'width': null,
+            'height': null
         }
         this.backgroundAlpha = 1
 
@@ -28,26 +32,14 @@ export class View {
     get x() {
         return this.graphics.x
     }
-    set x(newValue) {
-        this.graphics.x = newValue
-    }
     get right() {
         return this.graphics.x + this.width
-    }
-    set right(newValue) {
-        this.graphics.x = newValue - this.width
     }
     get y() {
         return this.graphics.y
     }
-    set y(newValue) {
-        this.graphics.y = newValue
-    }
     get bottom() {
         return this.graphics.y + this.height
-    }
-    set bottom(newValue) {
-        this.graphics.y = newValue - this.height
     }
     get width() {
         return this._width
@@ -56,12 +48,12 @@ export class View {
         this.children.forEach(child => {
             if (this.width == 0) {
                 child.width = newValue
-                child.x = 0
+                child.graphics.x = 0
             } else {
                 let newChildX = View._applyRatioToAnchor(child.x, newValue, this.width, child.anchors.left)
                 let newChildRight = newValue - View._applyRatioToAnchor(this.width-child.right, newValue, this.width, child.anchors.right)
-                child.x = newChildX
-                child.width = newChildRight - newChildX
+                child.graphics.x = newChildX
+                child.width = Math.max(child.contentMinimumSize.width || 0, newChildRight - newChildX)
             }
         });
         this._width = Math.max(0, newValue);
@@ -74,12 +66,12 @@ export class View {
         this.children.forEach(child => {
             if (this.height == 0) {
                 child.height = newValue
-                child.y = 0
+                child.graphics.y = 0
             } else {
                 let newChildY = View._applyRatioToAnchor(child.y, newValue, this.height, child.anchors.top)
                 let newChildBottom = newValue - View._applyRatioToAnchor(this.height-child.bottom, newValue, this.height, child.anchors.bottom)
-                child.y = newChildY
-                child.height = newChildBottom - newChildY
+                child.graphics.y = newChildY
+                child.height =  Math.max(child.contentMinimumSize.height || 0, newChildBottom - newChildY)
             }
         });
         this._height = Math.max(0, newValue);
