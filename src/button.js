@@ -7,10 +7,10 @@ export class Button extends View {
         super();
         this.label = new Label()
         this.addChild(this.label)
-        this.label.anchors.left = 5
-        this.label.anchors.right = 5
-        this.label.anchors.top = 5
-        this.label.anchors.bottom = 5
+        this.label.anchors.left.value = 5
+        this.label.anchors.right.value = 5
+        this.label.anchors.top.value = 5
+        this.label.anchors.bottom.value = 5
         this._draw()
     }
 
@@ -19,8 +19,10 @@ export class Button extends View {
     }
     set text(newValue) {
         this.label.text = newValue;
-        this.contentMinimumSize.width = this.label.anchors.left + this.label.width + this.label.anchors.right;
-        this.contentMinimumSize.height = this.label.anchors.top + this.label.height + this.label.anchors.bottom;
+        this.contentMinimumSize.width = this.label.anchors.left.value + this.label.width + this.label.anchors.right.value;
+        this.contentMinimumSize.height = this.label.anchors.top.value + this.label.height + this.label.anchors.bottom.value;
+        this.width = this.width         // TODO : clean this dirty fix
+        this.height = this.height       // TODO : clean this dirty fix
     }
 
     _draw() {

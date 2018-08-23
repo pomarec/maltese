@@ -1,4 +1,5 @@
 import './lib/pixi.js';
+import { Anchor } from './anchor.js';
 import { Color } from './color.js';
 
 export class View {
@@ -8,22 +9,24 @@ export class View {
         }
         this.id = View.nextObjectId++
         this.children = []
+        this.parent = null
         this.graphics = new PIXI.Graphics()
 
+
         // Default values
-        this.width = 0
-        this.height = 0
-        this.anchors = {        // null | nb pixels | "xx%"
-            'top': null,
-            'right': null,
-            'bottom': null,
-            'left': null
+        this.anchors = {                    // anchors take precedence on raw dimensions
+            'top': new Anchor('top'),
+            'right': new Anchor('right'),
+            'bottom': new Anchor('bottom'),
+            'left': new Anchor('left')
         }
         this.contentMinimumSize = {
             'width': null,
             'height': null
         }
         this.backgroundAlpha = 1
+        this.width = 0
+        this.height = 0
 
         this._draw();
     }
@@ -32,49 +35,57 @@ export class View {
     get x() {
         return this.graphics.x
     }
+    set x(newValue) {
+        this.graphics.x = newValue
+    }
     get right() {
         return this.graphics.x + this.width
+    }
+    set right(newValue) {
+        this.graphics.x = newValue - this.width
     }
     get y() {
         return this.graphics.y
     }
+    set y(newValue) {
+        this.graphics.y = newValue
+    }
     get bottom() {
         return this.graphics.y + this.height
+    }
+    set bottom(newValue) {
+        this.graphics.y = newValue - this.height
     }
     get width() {
         return this._width
     }
     set width(newValue) {
+        this._width = Math.max(this.contentMinimumSize.width || 0, newValue)
         this.children.forEach(child => {
-            if (this.width == 0) {
-                child.width = newValue
-                child.graphics.x = 0
-            } else {
-                let newChildX = View._applyRatioToAnchor(child.x, newValue, this.width, child.anchors.left)
-                let newChildRight = newValue - View._applyRatioToAnchor(this.width-child.right, newValue, this.width, child.anchors.right)
-                child.graphics.x = newChildX
-                child.width = Math.max(child.contentMinimumSize.width || 0, newChildRight - newChildX)
+            if (!child.anchors.left.isEmpty()) {
+                child.x = child.anchors.left.computeForView(child)
+            }
+            if (!child.anchors.right.isEmpty()) {
+                let newChildRight = child.anchors.right.computeForView(child)
+                child.width = this.width - newChildRight - child.x
             }
         });
-        this._width = Math.max(0, newValue);
-        this._draw();
+        this._draw()
     }
     get height() {
         return this._height
     }
     set height(newValue) {
+        this._height = Math.max(this.contentMinimumSize.height || 0, newValue)
         this.children.forEach(child => {
-            if (this.height == 0) {
-                child.height = newValue
-                child.graphics.y = 0
-            } else {
-                let newChildY = View._applyRatioToAnchor(child.y, newValue, this.height, child.anchors.top)
-                let newChildBottom = newValue - View._applyRatioToAnchor(this.height-child.bottom, newValue, this.height, child.anchors.bottom)
-                child.graphics.y = newChildY
-                child.height =  Math.max(child.contentMinimumSize.height || 0, newChildBottom - newChildY)
+            if (!child.anchors.top.isEmpty()) {
+                child.y = child.anchors.top.computeForView(child)
+            }
+            if (!child.anchors.bottom.isEmpty()) {
+                let newChildBottom = child.anchors.right.computeForView(child)
+                child.height = this.height - newChildBottom - child.y
             }
         });
-        this._height = Math.max(0, newValue);
         this._draw();
     }
     get backgroundColor() {
@@ -94,8 +105,9 @@ export class View {
 
     // Public methods
     addChild(view) {
-        this.graphics.addChild(view.graphics);
-        this.children.push(view);
+        this.graphics.addChild(view.graphics)
+        this.children.push(view)
+        view.parent = this
     }
 
     onTouchDown(func) {
@@ -112,14 +124,5 @@ export class View {
             this.graphics.drawRect(0, 0, this.width, this.height);
             this.graphics.endFill();
         }
-    }
-
-    static _applyRatioToAnchor(value, nextRef, previousRef, anchor) {
-        if (typeof anchor == 'number') {
-            return anchor
-        } else if (typeof anchor == 'string' && anchor[anchor.length-1] == '%') {
-            return nextRef * parseInt(anchor.substring(0, anchor.length-1))/100.0
-        }
-        return value * (nextRef/previousRef)
     }
 }
