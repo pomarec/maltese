@@ -11,7 +11,6 @@ export class Button extends View {
         this.label.anchors.right.value = 5
         this.label.anchors.top.value = 5
         this.label.anchors.bottom.value = 5
-        this._draw()
     }
 
     get text() {
@@ -25,8 +24,8 @@ export class Button extends View {
         this.height = this.height       // TODO : clean this dirty fix
     }
 
-    _draw() {
-        super._draw();
+    draw() {
+        super.draw();
         this.graphics.lineStyle(1, Color.BLACK, 1, 0.5);
         this.graphics.drawRoundedRect(0, 0, this.width, this.height, 2);
     }

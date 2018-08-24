@@ -13,7 +13,10 @@
     view.backgroundColor = 0x200032
     view.width = 100
     view.height = 100
-    //app.viewController.view.addChild(view)
+    view.cornerRadius = 40
+    view.anchors.left.value = 10
+    view.anchors.top.value = 10
+    app.viewController.view.addChild(view)
 
     let label = new Maltese.Label()
     label.text = "labelllll !"

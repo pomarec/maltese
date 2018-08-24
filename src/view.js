@@ -12,7 +12,6 @@ export class View {
         this.parent = null
         this.graphics = new PIXI.Graphics()
 
-
         // Default values
         this.anchors = {                    // anchors take precedence on raw dimensions
             'top': new Anchor('top'),
@@ -25,10 +24,11 @@ export class View {
             'height': null
         }
         this.backgroundAlpha = 1
+        this.cornerRadius = 0
         this.width = 0
         this.height = 0
 
-        this._draw();
+        this.setNeedsDraw();
     }
 
     // Getters & Setters
@@ -70,7 +70,7 @@ export class View {
                 child.width = this.width - newChildRight - child.x
             }
         });
-        this._draw()
+        this.setNeedsDraw()
     }
     get height() {
         return this._height
@@ -86,21 +86,28 @@ export class View {
                 child.height = this.height - newChildBottom - child.y
             }
         });
-        this._draw();
+        this.setNeedsDraw();
     }
     get backgroundColor() {
         return this._backgroundColor;
     }
     set backgroundColor(newValue) {
         this._backgroundColor = newValue
-        this._draw()
+        this.setNeedsDraw()
     }
     get backgroundAlpha() {
         return this._backgroundAlpha;
     }
     set backgroundAlpha(newValue) {
         this._backgroundAlpha = newValue;
-        this._draw();
+        this.setNeedsDraw();
+    }
+    get cornerRadius() {
+        return this._cornerRadius;
+    }
+    set cornerRadius(newValue) {
+        this._cornerRadius = newValue;
+        this.setNeedsDraw();
     }
 
     // Public methods
@@ -109,19 +116,21 @@ export class View {
         this.children.push(view)
         view.parent = this
     }
-
     onTouchDown(func) {
         this.graphics.interactive = true;
         this.graphics.on('tap', func);
         this.graphics.on('mousedown', func);
     }
+    setNeedsDraw() {
+        this.draw()
+    }
 
     // Private methods
-    _draw() {
+    draw() {
         this.graphics.clear();
         if (this.backgroundColor) {
             this.graphics.beginFill(this.backgroundColor, this.backgroundAlpha);
-            this.graphics.drawRect(0, 0, this.width, this.height);
+            this.graphics.drawRoundedRect(0, 0, this.width, this.height, this.cornerRadius);
             this.graphics.endFill();
         }
     }
