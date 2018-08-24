@@ -1,6 +1,5 @@
 import './lib/pixi.js';
 import { Anchor } from './anchor.js';
-import { Color } from './color.js';
 
 export class View {
     constructor() {
@@ -61,15 +60,7 @@ export class View {
     }
     set width(newValue) {
         this._width = Math.max(this.contentMinimumSize.width || 0, newValue)
-        this.children.forEach(child => {
-            if (!child.anchors.left.isEmpty()) {
-                child.x = child.anchors.left.computeForView(child)
-            }
-            if (!child.anchors.right.isEmpty()) {
-                let newChildRight = child.anchors.right.computeForView(child)
-                child.width = this.width - newChildRight - child.x
-            }
-        });
+        this.setNeedsLayoutChildren()
         this.setNeedsDraw()
     }
     get height() {
@@ -77,15 +68,7 @@ export class View {
     }
     set height(newValue) {
         this._height = Math.max(this.contentMinimumSize.height || 0, newValue)
-        this.children.forEach(child => {
-            if (!child.anchors.top.isEmpty()) {
-                child.y = child.anchors.top.computeForView(child)
-            }
-            if (!child.anchors.bottom.isEmpty()) {
-                let newChildBottom = child.anchors.right.computeForView(child)
-                child.height = this.height - newChildBottom - child.y
-            }
-        });
+        this.setNeedsLayoutChildren()
         this.setNeedsDraw();
     }
     get backgroundColor() {
@@ -115,17 +98,38 @@ export class View {
         this.graphics.addChild(view.graphics)
         this.children.push(view)
         view.parent = this
+        this.layoutChild(view)
     }
     onTouchDown(func) {
         this.graphics.interactive = true;
         this.graphics.on('tap', func);
         this.graphics.on('mousedown', func);
     }
+    setNeedsLayoutChildren() {
+        this.layoutChildren()
+    }
+    layoutChildren() {
+        this.children.forEach(this.layoutChild.bind(this));
+    }
+    layoutChild(child) {
+        if (!child.anchors.left.isEmpty()) {
+            child.x = child.anchors.left.computeForView(child)
+        }
+        if (!child.anchors.right.isEmpty()) {
+            let newChildRight = child.anchors.right.computeForView(child)
+            child.width = this.width - newChildRight - child.x
+        }
+        if (!child.anchors.top.isEmpty()) { 
+            child.y = child.anchors.top.computeForView(child)
+        }
+        if (!child.anchors.bottom.isEmpty()) {
+            let newChildBottom = child.anchors.right.computeForView(child)
+            child.height = this.height - newChildBottom - child.y
+        }
+    }
     setNeedsDraw() {
         this.draw()
     }
-
-    // Private methods
     draw() {
         this.graphics.clear();
         if (this.backgroundColor) {
@@ -133,5 +137,6 @@ export class View {
             this.graphics.drawRoundedRect(0, 0, this.width, this.height, this.cornerRadius);
             this.graphics.endFill();
         }
+        this.setNeedsLayoutChildren()
     }
 }
