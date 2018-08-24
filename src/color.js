@@ -13,4 +13,7 @@ export class Color {
     static get BLACK() {
         return 0x000000;
     }
+    static get RED() {
+        return 0xFF0000;
+    }
 }
