@@ -1,5 +1,3 @@
-import './lib/pixi.js';
-
 export class Color {
     static get BLUE() {
         return 0x0000FF;

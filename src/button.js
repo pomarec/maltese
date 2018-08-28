@@ -23,10 +23,4 @@ export class Button extends View {
         this.width = this.width         // TODO : clean this dirty fix
         this.height = this.height       // TODO : clean this dirty fix
     }
-
-    draw() {
-        super.draw();
-        this.graphics.lineStyle(1, Color.BLACK, 1, 0.5);
-        this.graphics.drawRoundedRect(0, 0, this.width, this.height, 2);
-    }
 }

@@ -1,4 +1,3 @@
-import './lib/pixi.js';
 import { View } from './view.js';
 
 export class ViewController {
