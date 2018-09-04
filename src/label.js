@@ -56,6 +56,3 @@ export class Label extends View {
         }
     }
 }
-
-
-*/
