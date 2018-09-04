@@ -4,7 +4,7 @@ import { Label } from './label.js';
 
 export class Button extends View {
     constructor() {
-        super();
+        super()
         this.label = new Label()
         this.addChild(this.label)
         this.label.anchors.left.value = 5
@@ -14,13 +14,9 @@ export class Button extends View {
     }
 
     get text() {
-        return this.label.text;
+        return this.label.text
     }
     set text(newValue) {
-        this.label.text = newValue;
-        this.contentMinimumSize.width = this.label.anchors.left.value + this.label.width + this.label.anchors.right.value;
-        this.contentMinimumSize.height = this.label.anchors.top.value + this.label.height + this.label.anchors.bottom.value;
-        this.width = this.width         // TODO : clean this dirty fix
-        this.height = this.height       // TODO : clean this dirty fix
+        this.label.text = newValue
     }
 }

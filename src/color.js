@@ -14,4 +14,11 @@ export class Color {
     static get RED() {
         return 0xFF0000;
     }
+    
+    static toContextColor(color) {
+        if (typeof color == 'string') {
+            return color
+        }
+        return (color == 0 ? '#000000' : '#' + color.toString(16))
+    }
 }

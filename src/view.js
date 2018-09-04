@@ -1,4 +1,5 @@
-import { Anchor } from './anchor.js';
+import { Anchor } from './anchor.js'
+import { Color } from './color.js'
 
 export class View {
     constructor() {
@@ -122,7 +123,7 @@ export class View {
         // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
         if (this.context) {
             this.context.clearRect(0, 0, this.width, this.height)
-            this.context.fillStyle = (this.backgroundColor == 0 ? '#000000' : '#' + this.backgroundColor.toString(16))
+            this.context.fillStyle = Color.toContextColor(this.backgroundColor)
             this.context.fillRect(0, 0, this.width, this.height)
             this.drawChildren()
             this.needsDraw = false

@@ -1,78 +1,61 @@
-import { View } from './view.js';
+import { View } from './view.js'
+import { Color } from './color.js'
 
+
+// ATM the label will draw text inside existing size
+// No size computing is made
 export class Label extends View {
     constructor() {
         super()
-        this.backgroundColor = 0xffffff
+        this.textColor = 0xffffff
+        this.backgroundColor = 0x000000
+        this.font = '48px serif'
     }
     get text() {
         return this._text
     }
     set text(newValue) {
         this._text = newValue
-        this.contentMinimumSize.width = 100
-        this.contentMinimumSize.height = 40
-        this.width = this.width         // TODO : clean this dirty fix
-        this.height = this.height       // TODO : clean this dirty fix
+        this.needsDraw = true
+    }
+    get textColor() {
+        return this._textColor
+    }
+    set textColor(newValue) {
+        this._textColor = newValue
+        this.needsDraw = true
+    }
+    get font() {
+        return this._font
+    }
+    set font(newValue) {
+        this._font = newValue
+        this.needsDraw = true
     }
     draw() {
         super.draw()
-        this.context.font = '48px serif'
+        this.context.font = this.font
         this.context.textBaseline = 'top'
-        this.context.fillStyle = '0x123143'
-        this.context.fillText(this.text, 0, 0, this.width)
+        this.context.fillStyle = Color.toContextColor(this.textColor)
+        let lineHeight = parseInt(this.font.split('px')[0]) + 4
+
+        var x = 0, y = 0
+        for (var i = 0; i < (this.text || "").length; i++) {
+            let char = this.text[i]
+            let charWidth = this.context.measureText(char).width
+            if (x + charWidth > this.width) {
+                y += lineHeight
+                x = 0
+            }
+            if (y + lineHeight > this.height) {
+                break
+            }
+            this.context.fillText(char, x, y+2)
+            console.log(char, x, y)
+            x += charWidth
+        }
     }
 }
 
-
-/*
-
-CanvasRenderingContext2D.prototype.wrapText = function (text, x, y, maxWidth, lineHeight) {
-
-    var lines = text.split("\n");
-
-    for (var i = 0; i < lines.length; i++) {
-
-        var words = lines[i].split(' ');
-        var line = '';
-
-        for (var n = 0; n < words.length; n++) {
-            var testLine = line + words[n] + ' ';
-            var metrics = this.measureText(testLine);
-            var testWidth = metrics.width;
-            if (testWidth > maxWidth && n > 0) {
-                this.fillText(line, x, y);
-                line = words[n] + ' ';
-                y += lineHeight;
-            } else {
-                line = testLine;
-            }
-        }
-
-        this.fillText(line, x, y);
-        y += lineHeight;
-    }
-};
-
-
-
-var myCanvas = document.getElementById("myCanvas");
-var ctx = myCanvas.getContext("2d");
-
-// Background.
-ctx.fillStyle = "black";
-ctx.fillRect(0, 0, 400, 200);
-
-// Line at 180px width to see demonstrate maximum line length. (20x + 160 width)
-ctx.strokeStyle = "red";
-ctx.moveTo (180.5,0);
-ctx.lineTo (180.5,200);
-ctx.stroke();
-
-// Multi-line text.
-ctx.fillStyle = "white";
-ctx.font = "18px sans-serif";
-ctx.textBaseline = "top";
-ctx.wrapText("Hello World!\n\nLet's stop taking line breaks for granted.\n\n\nLet's thank the inventors of line breaks for all they went through.",20,20,200,18 + 3);
 
 */
