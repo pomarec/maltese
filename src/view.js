@@ -27,7 +27,7 @@ export class View {
         this.y = 0
         this.width = 0
         this.height = 0
-        this.backgroundColor = 0x000000
+        this.backgroundColor = Color.BLACK
 
         this.needsDraw = true
         this.setNeedsLayoutChildren()
@@ -124,7 +124,10 @@ export class View {
         if (this.context) {
             this.context.clearRect(0, 0, this.width, this.height)
             this.context.fillStyle = Color.toContextColor(this.backgroundColor)
-            this.context.fillRect(0, 0, this.width, this.height)
+            this.context.beginPath()
+            this.context.rect(0, 0, this.width, this.height)
+            this.context.fill()
+            this.context.clip()
             this.drawChildren()
             this.needsDraw = false
         }

@@ -7,9 +7,9 @@ import { Color } from './color.js'
 export class Label extends View {
     constructor() {
         super()
-        this.textColor = 0xffffff
-        this.backgroundColor = 0x000000
-        this.font = '48px serif'
+        this.textColor = Color.WHITE
+        this.backgroundColor = Color.BLACK
+        this.font = '15px serif'
     }
     get text() {
         return this._text
@@ -51,7 +51,6 @@ export class Label extends View {
                 break
             }
             this.context.fillText(char, x, y+2)
-            console.log(char, x, y)
             x += charWidth
         }
     }
