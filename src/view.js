@@ -145,6 +145,7 @@ export class View {
             child.draw()
             child.context.transform(1, 0, 0, 1, -child.x, -child.y)
         })
+    }
     setNeedsDraw() {
         this.draw()
     }

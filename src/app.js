@@ -57,7 +57,7 @@ export class App extends ViewController {
             console.log("difftime", Date.now() - this.moves[0])
         }
         this.moves = []
-    
+    }
     static setMarginPaddingToZero() {
         var newStyle = document.createElement("style")
         var style = "* {padding: 0; margin: 0}"
@@ -76,8 +76,7 @@ export class App extends ViewController {
         }
 
     _setSizeToWindow() {
-        this.pixi_app.renderer.resize(window.innerWidth, window.innerHeight)
-        this.viewController.view.width = window.innerWidth
-        this.viewController.view.height = window.innerHeight
+        this.view.width = window.innerWidth
+        this.view.height = window.innerHeight
     }
 }
