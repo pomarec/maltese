@@ -12,49 +12,5 @@
     "repository": {
       "type": "git",
       "url": "https://github.com/pomarec/maltese.git"
-    },
-    "scripts": {
-      "clean": "rimraf dist lib && mkdirp dist && mkdir lib",
-      "prestart": "npm run clean",
-      "start": "parallelshell \"npm run watch\" \"npm run watch:lint\" \"npm run watch:lib\"",
-      "watch": "npm run dist -- --watch",
-      "watch:lib": "npm run lib -- --watch",
-      "watch:lint": "watch \"eslint scripts src test || exit 0\" src",
-      "test": "npm run lint && npm run dist && npm run coverage",
-      "unit-test": "floss --path test/index.js",
-      "unit-test:debug": "npm run unit-test -- --debug",
-      "prerenders": "npm --prefix scripts/renders i scripts/renders",
-      "renders": "electron scripts/renders",
-      "precoverage": "rimraf coverage",
-      "coverage": "npm run unit-test -- -c dist/pixi.js -s -h",
-      "lint": "eslint scripts src test --max-warnings 0",
-      "lintfix": "npm run lint --fix",
-      "prebuild": "npm run lint",
-      "build": "npm run dist",
-      "predist": "rimraf dist/**",
-      "dist": "pixify -d dist -n PIXI -o pixi -t babelify",
-      "prelib": "rimraf lib/**",
-      "lib": "babel src --out-dir lib -s",
-      "predocs": "rimraf docs/**",
-      "docs": "jsdoc -c scripts/jsdoc.conf.json -R README.md",
-      "publish:patch": "npm version patch && npm publish",
-      "publish:minor": "npm version minor && npm publish",
-      "publish:major": "npm version major && npm publish",
-      "postversion": "npm run clean && npm run build && npm run lib && npm run unit-test",
-      "postpublish": "git push && git push --tags"
-    },
-    "files": [
-      "dist/",
-      "src/",
-      "CONTRIBUTING.md",
-      "LICENSE",
-      "package.json",
-      "README.md"
-    ],
-    "dependencies": {
-      "pixijs": "4.8.1"
-    },
-    "devDependencies": {
-      "watch": "^0.19.1"
     }
   }

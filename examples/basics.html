@@ -5,39 +5,22 @@
     let app = new Maltese.App()
     
     let vc = new Maltese.ViewController()
-    vc.view.backgroundColor = 0x234132
-    app.viewController.addChild(vc)
-
+    vc.view.backgroundColor = Maltese.Color.GREEN
+    app.addChild(vc)
 
     let view = new Maltese.View()
-    view.backgroundColor = 0x200032
-    view.width = 100
-    view.height = 100
-    view.cornerRadius = 40
-    view.anchors.left.value = 10
+    view.backgroundColor = Maltese.Color.RED
+    view.anchors.left.value = 50
     view.anchors.top.value = 10
-    app.viewController.view.addChild(view)
-
+    view.width = 1150
+    view.height = 2000
+    vc.view.addChild(view)
+    
     let label = new Maltese.Label()
-    label.text = "labelllll !"
-    label.anchors.top.value = 200
+    label.text = "labellJjgGfFlll !"
     label.anchors.left.value = 32
-    app.viewController.view.addChild(label)
-
-    let button = new Maltese.Button()
-    button.text = "push me !"
-    button.anchors.left.value = 100
-    button.anchors.left.relativeTo = [label, label.anchors.right]
-    button.onTouchDown(function() {
-        button.anchors.left += 1
-        button.text = button.x
-    })
-    button.anchors.right.value = 300
-    button.anchors.top.value = 35
-    app.viewController.view.addChild(button);
-
-
+    label.anchors.top.value = 30
+    label.width = 300
+    label.height = 200
+    view.addChild(label)
 </script>
-
-<!-- body is needed for development / livereload -->
-<body></body>
