@@ -31,10 +31,11 @@ export class App extends ViewController {
         window.addEventListener("resize", this.resizeToWindow.bind(this))
         window.addEventListener("load", this.resizeToWindow.bind(this))
 
-        window.addEventListener("resize", this._setSizeToWindow.bind(this))
-        this._setSizeToWindow()
-        setTimeout(this._setSizeToWindow.bind(this), 1)     // TODO: clean this dirty bugfix
-        setTimeout(this._setSizeToWindow.bind(this), 2)     // TODO: clean this dirty bugfix
+        // Mouse & touch events
+        this.canvas.addEventListener("mousedown", this.onMouseDown.bind(this))
+        this.canvas.addEventListener("mousemove", this.onMouseMove.bind(this))
+        this.canvas.addEventListener("mouseup", this.onMouseUp.bind(this))
+
         this.run()
         setInterval(this.run.bind(this), RUN_INTERVAL)
     }
@@ -58,25 +59,28 @@ export class App extends ViewController {
         }
         this.moves = []
     }
-    static setMarginPaddingToZero() {
-        var newStyle = document.createElement("style")
-        var style = "* {padding: 0; margin: 0}"
-        newStyle.appendChild(document.createTextNode(style))
-        document.head.appendChild(newStyle)
-    }
-
-    _createPixiApp() {
-        let app = new PIXI.Application({
-            antialias: true
-        });
-        app.renderer.view.style.position = "absolute"
-        app.renderer.view.style.display = "block"
-        app.renderer.autoResize = true
-        return app
+    onMouseDown(event) {
+        this.draggingView = this.view.hit(event.clientX, event.clientY)
+        this.draggingStartPoint = {'x': event.clientX, 'y': event.clientY}
+        if (this.draggingView) {
+            this.draggingView.printDebug(false)
+            this.draggingView.onPanStarted()
         }
-
-    _setSizeToWindow() {
-        this.view.width = window.innerWidth
-        this.view.height = window.innerHeight
+    }
+    onMouseMove(event) {
+        if (this.draggingView) {
+            this.moves.push(Date.now())
+            let translation = {
+                'x': event.clientX - this.draggingStartPoint.x,
+                'y': event.clientY - this.draggingStartPoint.y
+            }
+            this.draggingView.onPanMoved(translation)
+        }
+    }
+    onMouseUp(event) {
+        if (this.draggingView) {
+            this.draggingView.onPanEnded()
+        }
+        this.draggingView = null
     }
 }

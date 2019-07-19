@@ -146,8 +146,29 @@ export class View {
             child.context.transform(1, 0, 0, 1, -child.x, -child.y)
         })
     }
+<<<<<<< Updated upstream
     setNeedsDraw() {
         this.draw()
+=======
+    hit(x, y) {
+        // Returns "childest" view at this coordinates
+        let eligibleChildren = this.children.filter(child =>
+            (child.x <= x && child.width + child.x >= x) &&
+            (child.y <= y && child.height + child.y >= y)
+        )
+        if (eligibleChildren.length > 0) {
+            let electedChild = eligibleChildren[eligibleChildren.length - 1]
+            return electedChild.hit(x - electedChild.x, y - electedChild.y)
+        } else {
+            return this
+        }
+    }
+    onPanStarted() {
+    }
+    onPanMoved(translation) {
+    }
+    onPanEnded() {
+>>>>>>> Stashed changes
     }
 
     printDebug(recursive = true, indent = 0) {

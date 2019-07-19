@@ -1,0 +1,26 @@
+<meta charset="UTF-8">
+<script type="module">
+    import * as Maltese from '../src/maltese.js';
+    
+    let app = new Maltese.App()
+    
+    let vc = new Maltese.ViewController()
+    vc.view.backgroundColor = Maltese.Color.GREEN
+    app.addChild(vc)
+
+    let view = new Maltese.ScrollView()
+    view.backgroundColor = Maltese.Color.RED
+    view.anchors.left.value = 50
+    view.anchors.top.value = 10
+    view.width = 1150
+    view.height = 240
+    vc.view.addChild(view)
+
+    let label = new Maltese.Label()
+    label.text = "labellJjgGfFlll !"
+    label.anchors.left.value = 32
+    label.anchors.top.value = 200
+    label.width = 300
+    label.height = 200
+    view.addChild(label)
+</script>
