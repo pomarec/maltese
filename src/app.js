@@ -1,5 +1,7 @@
 import { ViewController } from './viewController.js';
 
+let RUN_INTERVAL = 1000/80.0
+
 export class App extends ViewController {
     constructor() {
         super()
@@ -10,7 +12,7 @@ export class App extends ViewController {
         let canvasStyle = document.createElement("style")
         canvasStyle.appendChild(document.createTextNode(`canvas {
             padding: 0px; 
-            margin: 0px; 
+            margin: 0px;
             position: absolute; 
             display: block;
             width: 100vw;
@@ -29,7 +31,13 @@ export class App extends ViewController {
         window.addEventListener("resize", this.resizeToWindow.bind(this))
         window.addEventListener("load", this.resizeToWindow.bind(this))
 
+        // Mouse & touch events
+        this.canvas.addEventListener("mousedown", this.onMouseDown.bind(this))
+        this.canvas.addEventListener("mousemove", this.onMouseMove.bind(this))
+        this.canvas.addEventListener("mouseup", this.onMouseUp.bind(this))
+
         this.run()
+        setInterval(this.run.bind(this), RUN_INTERVAL)
     }
     resizeToWindow() {
         this.canvas.width = window.innerWidth
@@ -38,9 +46,45 @@ export class App extends ViewController {
         this.view.height = this.canvas.height
     }
     run() {
+        //let startDate = Date.now()
         if (this.view.needsDraw) {
             this.view.draw()
+            //console.log(Date.now(), "draw")
         }
-        setTimeout(this.run.bind(this), 1000/30.0)
+        /*let drawDuration = Date.now() - startDate
+        if (drawDuration > RUN_INTERVAL) {
+            console.log("Slow draw", drawDuration)
+        }*/
+        if (this.moves && this.moves.length > 1) {
+            console.log("difftime", Date.now() - this.moves[0])
+        }
+        this.moves = []
+    }
+    https://github.com/ijzerenhein/autolayout.js/
+    https://rawgit.com/IjzerenHein/autolayout.js/master/examples/DOM/index.html
+    https://github.com/IjzerenHein/famous-autolayout#spacing
+    onMouseDown(event) {
+        this.draggingView = this.view.hit(event.clientX, event.clientY)
+        this.draggingStartPoint = {'x': event.clientX, 'y': event.clientY}
+        if (this.draggingView) {
+            this.draggingView.printDebug(false)
+            this.draggingView.onPanStarted()
+        }
+    }
+    onMouseMove(event) {
+        if (this.draggingView) {
+            this.moves.push(Date.now())
+            let translation = {
+                'x': event.clientX - this.draggingStartPoint.x,
+                'y': event.clientY - this.draggingStartPoint.y
+            }
+            this.draggingView.onPanMoved(translation)
+        }
+    }
+    onMouseUp(event) {
+        if (this.draggingView) {
+            this.draggingView.onPanEnded()
+        }
+        this.draggingView = null
     }
 }

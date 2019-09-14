@@ -8,36 +8,39 @@
     vc.view.backgroundColor = 0x234132
     app.addChild(vc)
 
-    let view = new Maltese.View()
-    view.backgroundColor = 0x200032
+    let view = new Maltese.ScrollView()
+    view.backgroundColor = Maltese.Color.RED
     view.cornerRadius = 40
     view.anchors.left.value = 50
     view.anchors.top.value = 10
-    view.anchors.bottom.value = "30%"
-    view.anchors.right.value = "30%"
+    view.width = 1150
+    view.height = 240
     vc.view.addChild(view)
 
-    let label = new Maltese.Label()
+    let label = new Maltese.View()
     label.text = "labellJjgGfFlll !"
     label.anchors.left.value = 32
     label.anchors.top.value = 200
-    label.anchors.right.value = 32
-    label.anchors.bottom.value = 200
+    // label.anchors.right.value = 32
+    // label.anchors.bottom.value = 200
+    label.width = 300
+    label.height = 200
     view.addChild(label)
 
     let button = new Maltese.Button()
     button.text = "push me !"
     button.label.font = "20px serif-sans"
-    button.anchors.left.value = 100
+    button.anchors.left.value = -30
     button.anchors.left.relativeTo = [label, label.anchors.right]
     // button.onTouchDown(function() {
     //     button.anchors.left += 1
     //     button.text = button.x
     // })
-    button.anchors.right.value = 300
+    //button.anchors.right.value = 300
     button.anchors.top.value = 35
     button.height = 50
-    vc.view.addChild(button);
+    button.width = 200
+    //vc.view.addChild(button);
 
 </script>
 

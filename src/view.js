@@ -34,6 +34,20 @@ export class View {
     }
 
     // Getters & Setters
+    get x() {
+        return this._x;
+    }
+    set x(newValue) {
+        this._x = newValue
+        this.needsDraw = true
+    }
+    get y() {
+        return this._y;
+    }
+    set y(newValue) {
+        this._y = newValue
+        this.needsDraw = true
+    }
     get right() {
         return this.x + this.width
     }
@@ -127,7 +141,8 @@ export class View {
             this.context.beginPath()
             this.context.rect(0, 0, this.width, this.height)
             this.context.fill()
-            this.context.clip()
+            //this.context.clip()
+            //console.log("draw", this.id, this.x, this.width)
             this.drawChildren()
             this.needsDraw = false
         }
@@ -138,5 +153,31 @@ export class View {
             child.draw()
             child.context.transform(1, 0, 0, 1, -child.x, -child.y)
         })
+    }
+    hit(x, y) {
+        // Returns "childest" view at this coordinates
+        let eligibleChildren = this.children.filter(child =>
+            (child.x <= x && child.width + child.x >= x) &&
+            (child.y <= y && child.height + child.y >= y)
+        )
+        if (eligibleChildren.length > 0) {
+            let electedChild = eligibleChildren[eligibleChildren.length - 1]
+            return electedChild.hit(x - electedChild.x, y - electedChild.y)
+        } else {
+            return this
+        }
+    }
+    onPanStarted() {
+    }
+    onPanMoved(translation) {
+    }
+    onPanEnded() {
+    }
+
+    printDebug(recursive = true, indent = 0) {
+        console.log(Array(indent).join(" "), this.id, this.constructor.name, this.x, this.y, this.width, this.height)
+        if (recursive) {
+            this.children.forEach(child => child.printDebug(true, indent + 2))
+        }
     }
 }
